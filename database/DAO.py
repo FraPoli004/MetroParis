@@ -25,7 +25,7 @@ class DAO():
 
 
     @staticmethod
-    def hasconn(u:Fermata,v:Fermata) -> bool:
+    def hasconn(u:Fermata,v:Fermata):
         conn = DBConnect.get_connection()
 
         result = []
@@ -41,7 +41,7 @@ class DAO():
         return len(result) > 0
 
     @staticmethod
-    def getvicini(u: Fermata, v: Fermata) -> bool:
+    def getvicini(u: Fermata):
         conn = DBConnect.get_connection()
 
         result = []
@@ -54,7 +54,7 @@ class DAO():
             result.append(Connessione(**row))
         cursor.close()
         conn.close()
-        return len(result) > 0
+        return result
 
     @staticmethod
     def getAllEdges():

@@ -9,10 +9,26 @@ class Controller:
         self._model = model
 
     def handleCreaGrafo(self,e):
-        pass
+        self._model.buildGraph()
+        self._view.lst_result.controls.clear()
+        self._view.lst_result.controls.append(ft.Text("grafo correttamente creato"))
+        self._view.lst_result.controls.append(ft.Text(f"il grafo è costituito da {self._model.get_numnodi()} nodi"))
+        self._view.lst_result.controls.append(ft.Text(f"il grafo è costituito da {self._model.get_numarchi()} archi"))
+        self._view.update_page()
 
     def handleCercaRaggiungibili(self,e):
-        pass
+        if self._fermataPartenza is None:
+            self._view.lst_result.controls.clear()
+            self._view.lst_result.controls.append(ft.Text("Attenzione non è stata fatta una scelta di stazione di partenza", color="red"))
+            self._view.update_page()
+            return
+
+        nodes = self._model.getBFSNodesFromEdges(self._fermataPartenza)
+        self._view.lst_result.controls.clear()
+        self._view.lst_result.controls.append(ft.Text(f"di seguito i nodi raggiungibili da {self._fermataPartenza}", color="green"))
+        for node in nodes:
+            self._view.lst_result.controls.append(ft.Text(node))
+        self._view.update_page()
 
     def loadFermate(self, dd: ft.Dropdown()):
         fermate = self._model.fermate
