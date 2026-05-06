@@ -4,7 +4,7 @@ from model.model import Model
 model = Model()
 print("numero nodi:", model.get_numnodi())
 print("numero archi:",model.get_numarchi())
-model.buildGraph()
+model.buildGraphPesato()
 print("numero nodi:", model.get_numnodi())
 print("numero archi:",model.get_numarchi())
 
@@ -19,3 +19,11 @@ nodiDFS = model.getDFSNodesFromEdges(source)
 print(len(nodiDFS))
 for i in range(0,10):
     print(nodiDFS[i])
+
+
+    print("======================================================================================")
+
+    print("Archi con peso 2")
+    archiMaggiori = model.getArchiPesoMaggiore()
+    for a in archiMaggiori:
+        print(a[0],"->",a[1], "peso:", a[2]["weight"])

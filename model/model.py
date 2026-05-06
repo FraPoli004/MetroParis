@@ -52,6 +52,48 @@ class Model:
             v = self._idMapFermate[conn.id_stazA]
             self._grafo.add_edge(u, v)
 
+    def buildGraphPesato(self):
+        self._grafo.clear()
+        self._grafo.add_nodes_from(self._fermate)
+        self.addEdgesPesati()
+
+
+    def addEdgesPesati(self):
+        #riutilizzo la base di addedges3 e poi conto quante volte provo ad aggiungere gli archi
+        self._grafo.clear_edges()
+        alledges = DAO.getAllEdges()
+        for conn in alledges:
+            u = self._idMapFermate[conn.id_stazP]
+            v = self._idMapFermate[conn.id_stazA]
+
+            if self._grafo.has_edge(u, v):
+                self._grafo[u][v]['weight'] += 1
+            else:
+                self._grafo.add_edge(u, v, weight=1)
+
+    def addEdgesPesatiV2(self):
+        #delega il calcolo del peso alla query sql
+        self._grafo.clear_edges()
+        allEdgesWPeso = DAO.getAllEdgesPesati()
+
+        for e in allEdgesWPeso:
+            u = self._idMapFermate[e[0]]
+            v = self._idMapFermate[e[1]]
+            peso = e[2]
+
+            self._grafo.add_edge(u, v, weight=peso)
+
+    def getArchiPesoMaggiore(self):
+        edges = self._grafo.edges(data = True)
+
+        edgesMaggiori = []
+        for e in edges:
+            if self._grafo.get_edge_data(e[0], e[1])['weight'] > 1:
+
+                edgesMaggiori.append(e)
+        return edgesMaggiori
+
+
     #QUESTI 4 METODI SONO TUTTI EQUIVALENTI, CAMBIA SOLO IL METODO DI RAPPRESENTAZIONE, DA ARCHI O DA ALBERO
     def getBFSNodesFromEdges(self,source):
         archi = nx.bfs_edges(self._grafo,source)
